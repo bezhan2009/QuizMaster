@@ -19,7 +19,6 @@ initialize_db()
 
 @app.route('/', methods=['GET'])
 def index():
-    print("Hi")
     return render_template('index.html')
 
 
