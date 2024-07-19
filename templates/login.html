@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Вход{% endblock %}
+{% block func_next %}
+<a href="http://127.0.0.1:5000/registration" style="position: fixed; width: 150px;height: 20px; right: 20px; text-align: center; line-height: 20px; text-decoration: none;">
+     Регистрация
+   </a>
+{% endblock %}
+
+{% block that_login_reg %}
+<h2 align="center">Вход</h2>
+    <form action="http://127.0.0.1:5000/login" method="post">
+        <div>
+            <label for="name">Логин:</label>
+            <input type="text" id="name" name="name">
+        </div>
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password">
+        </div>
+        <button type="submit">Вход</button>
+    </form>
+<h6 id="is_success" style="position: absolute;visibility: hidden">{{ info.is_success }}</h6>
+<script>
+    is_success = document.getElementById('is_success')
+    if (is_success.innerHTML === "False") {
+        if (confirm("Логин или пароль не правильные!!!")) {
+            alert("Тестовый юзер логин bezhan пароль bezhan2009")
+        }
+        else {
+            alert("При нажатии на Ок вы бы получили данные об тестовом юзере")
+        }
+    }
+</script>
+{% endblock %}

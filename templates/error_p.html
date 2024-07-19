@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ошибка на сервере</title>
+    <link rel="stylesheet" href="style/main_css_fail_for_log.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_css_fail_for_log.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        .error-message {
+            color: #ff0000;
+            font-size: 32px;
+            margin-top: 50px;
+        }
+
+        .error-description {
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: left;
+            width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .error-description ol {
+            list-style-type: decimal;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="gradient-container" id="gradient-container">
+</div>
+<div style="position:relative;color: #f9f9f9">
+    <h1 class="error-message">Произошла ошибка!!!</h1>
+    <div class="error-description">
+        <p>Пока причина ошибки неизвестна, но она могла произойти из-за:</p>
+        <ol>
+            <li>Ошибка UNIQUE: Возможно, вы ввели данные, которые уже есть в нашей базе</li>
+            <li>Ошибка транзакции: Если это ошибка транзакции, рекомендуется перезапустить приложение</li>
+            <li>Ошибка синтаксиса в нашем коде: Эта ошибка маловероятна, так как приложение было тщательно протестировано</li>
+            <li>Ошибка секретного ключа: Возможно, вы или кто-то другой удалили секретный ключ в исходном коде (main.py). Если это так, вставьте этот код в 9-ю строку приложения: <code>app.secret_key = 'Выдумайте секретный ключ'</code></li>
+            <li>Любая другая ошибка: Если ошибка не исчезла, напишите автору приложения: <a href="https://t.me/Just_a_Bezhan">https://t.me/Just_a_Bezhan</a></li>
+        </ol>
+        <div align="center">
+            <a href="http://127.0.0.1:5000/indexing_main">Главная страница</a>
+        </div>
+        <h1>
+            {{ reall_error }}
+        </h1>
+    </div>
+</div>
+
+
+</body>
+</html>
