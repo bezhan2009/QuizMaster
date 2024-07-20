@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_jwt.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать</h1>
+        <button class="btn btn-transparent" id="login" style="width: auto">Вход</button>
+        <br>
+        <button class="btn btn-primary" id="register" style="width: auto">Регистрация</button>
+    </div>
+    <script>
+        document.getElementById('login').addEventListener('click', function() {
+            window.location.href = "{{ url_for('login') }}";
+        });
+
+        document.getElementById('register').addEventListener('click', function() {
+            window.location.href = "{{ url_for('register') }}";
+        });
+    </script>
+</body>
+</html>

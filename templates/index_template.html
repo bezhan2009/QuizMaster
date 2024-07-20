@@ -20,8 +20,8 @@
                     <a href="">Помощь</a>
                 </nav>
                 <div class="header-nav-actions">
-                    <button class="btn btn-transparent">Вход</button>
-                    <button class="btn btn-primary">Регистрация</button>
+                    <button class="btn btn-transparent" id="login">Вход</button>
+                    <button class="btn btn-primary" id="register">Регистрация</button>
                 </div>
             </div>
         </div>
@@ -31,9 +31,18 @@
     </main>
     <script>
         function toggleMenu() {
-            var menu = document.querySelector('.header-nav-menu');
+            let menu = document.querySelector('.header-nav-menu');
             menu.classList.toggle('show');
         }
+
+        document.getElementById('login').addEventListener('click', function() {
+            window.location.href = '{{ url_for("login") }}';
+        });
+
+        document.getElementById('register').addEventListener('click', function() {
+            window.location.href = '{{ url_for("register") }}';
+        });
+
     </script>
 </body>
 </html>
