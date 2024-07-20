@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_css_file_for_index.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="header-nav">
+                <div class="header-nav-logo">
+                    <svg-icon></svg-icon>
+                </div>
+                <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+                <nav class="header-nav-menu">
+                    <a href="">Создать опрос</a>
+                    <a href="">Просмотреть опросы</a>
+                    <a href="">Просмотреть мою историю опросов</a>
+                    <a href="">Помощь</a>
+                </nav>
+                <div class="header-nav-actions">
+                    <button class="btn btn-transparent">Вход</button>
+                    <button class="btn btn-primary">Регистрация</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <script>
+        function toggleMenu() {
+            var menu = document.querySelector('.header-nav-menu');
+            menu.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
