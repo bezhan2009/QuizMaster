@@ -23,28 +23,32 @@
         <p>Нет аккаунта? <a href="{{ url_for('register') }}">Регистрация</a></p>
     </div>
     <script>
-        document.getElementById('login-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+    document.getElementById('login-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-            const response = await fetch('{{ url_for("api_login") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password })
-            });
+    const response = await fetch('{{ url_for("api_login") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+    });
 
-            const data = await response.json();
-            if (data.access_token) {
-                localStorage.setItem('token', data.access_token);
-                alert('Login successful!');
-                window.location.href = '{{ url_for("profile") }}';
-            } else {
-                alert(data.message);
-            }
-        });
+    const data = await response.json();
+    if (data.access_token && data.user_id) {
+        localStorage.setItem('token', data.access_token);
+        alert('Login successful!');
+        // Формируем URL корректно
+        window.location.href = `/profile/${data.user_id}/`;
+    } else {
+        alert(data.message);
+    }
+});
     </script>
+
+
+
 </body>
 </html>

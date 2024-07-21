@@ -101,7 +101,7 @@
                 const userLink = document.createElement('a');
                 userLink.className = 'user';
                 userLink.id = 'user-' + user.id;
-                userLink.href = `/profile?user=${user.id}`;
+                userLink.href = `/profile/${user.id}/`;
 
                 const userPhoto = document.createElement('img');
                 userPhoto.src = user.photo_url;

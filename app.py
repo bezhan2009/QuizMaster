@@ -123,14 +123,23 @@ def api_login():
             'user_id': user['id'],
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
         }, app.config['SECRET_KEY'])
-        return jsonify({'access_token': token})
+        return jsonify({'access_token': token, 'user_id': user['id']})
 
     return jsonify({'message': 'Invalid credentials'}), 401
 
 
-@app.route('/profile')
-def profile():
-    return render_template('index.html'), 200
+@app.route('/profile/<int:id_user>/', methods=['GET'])
+def profile(id_user):
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute("SELECT * FROM users WHERE id = %s", (id_user,))
+    user = cur.fetchone()
+    cur.close()
+    conn.close()
+    if user:
+        return render_template('profile.html', user=user)
+    else:
+        return jsonify({'error': 'User not found'}), 404
 
 
 if __name__ == '__main__':

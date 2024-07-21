@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="header-nav">
+                <ul class="header-nav-menu">
+                    <li><a href="#">Домой</a></li>
+                    <li><a href="#">Сообщения</a></li>
+                    <li><a href="#">Уведомления</a></li>
+
+                </ul>
+                <div class="header-nav-actions">
+                    <button class="btn btn-primary">Выйти</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="profile">
+        <div class="profile-header">
+            <div class="profile-cover">
+                <img src="https://via.placeholder.com/1200x400" alt="Обложка профиля">
+            </div>
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <img src="https://via.placeholder.com/150" alt="Аватар пользователя">
+                </div>
+                <div class="profile-details">
+                    <h1>Имя Фамилия</h1>
+                    <p>@username</p>
+                    <button class="btn btn-primary">Редактировать профиль</button>
+                </div>
+            </div>
+        </div>
+
+        <section class="profile-content">
+            <div class="profile-section">
+                <h2>О себе</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Integer vel ligula ut risus gravida aliquet.</p>
+            </div>
+
+            <div class="profile-section">
+                <h2>Достижения</h2>
+                <ul>
+                    <li>Достижение 1</li>
+                    <li>Достижение 2</li>
+                    <li>Достижение 3</li>
+                </ul>
+            </div>
+
+            <div class="profile-section">
+                <h2>Контакты</h2>
+                <ul>
+                    <li>Email: user@example.com</li>
+                    <li>Телефон: +123 456 7890</li>
+                    <li>Сайт: <a href="#">userwebsite.com</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
