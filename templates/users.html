@@ -9,18 +9,52 @@
             color: white;
             font-family: Arial, sans-serif;
         }
-        .user-container {
-            max-width: 600px;
+        .container {
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            text-align: center;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 25px;
+            border: none;
+            font-size: 16px;
+            outline: none;
+            background-color: #2c2c2c;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .search-container input:focus {
+            background-color: #3d3d3d;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .user-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
         .user {
             display: flex;
             align-items: center;
+            justify-content: center;
             background-color: #1e1e1e;
             margin-bottom: 10px;
             padding: 10px;
             border-radius: 8px;
+            flex-basis: 30%;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.5s;
+            opacity: 1;
+        }
+        .user:hover {
+            transform: scale(1.1, 1.1);
         }
         .user img {
             width: 40px;
@@ -29,30 +63,63 @@
             margin-right: 10px;
             object-fit: cover;
         }
+        .user.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            visibility: hidden;
+        }
     </style>
 </head>
 <body>
-    <div id="userList" class="user-container"></div>
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Поиск пользователей" oninput="searchUsers()">
+        </div>
+        <div id="userList" class="user-container"></div>
+    </div>
 
     <script>
+        let allUsers = [];
+
+        function searchUsers() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const userList = document.getElementById('userList');
+            allUsers.forEach(user => {
+                const userElement = document.getElementById('user-' + user.id);
+                if (user.username.toLowerCase().includes(query)) {
+                    userElement.classList.remove('hidden');
+                } else {
+                    userElement.classList.add('hidden');
+                }
+            });
+        }
+
+        function displayUsers(users) {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            users.forEach(user => {
+                const userLink = document.createElement('a');
+                userLink.className = 'user';
+                userLink.id = 'user-' + user.id;
+                userLink.href = `/profile?user=${user.id}`;
+
+                const userPhoto = document.createElement('img');
+                userPhoto.src = user.photo_url;
+
+                const userName = document.createElement('span');
+                userName.textContent = user.username;
+
+                userLink.appendChild(userPhoto);
+                userLink.appendChild(userName);
+                userList.appendChild(userLink);
+            });
+        }
+
         fetch('/api/users')
             .then(response => response.json())
             .then(users => {
-                const userList = document.getElementById('userList');
-                users.forEach(user => {
-                    const userDiv = document.createElement('div');
-                    userDiv.className = 'user'; // Добавляем класс для стилей
-
-                    const userPhoto = document.createElement('img');
-                    userPhoto.src = user.photo_url; // Убедитесь, что этот URL правильный
-
-                    const userName = document.createElement('span');
-                    userName.textContent = user.username;
-
-                    userDiv.appendChild(userPhoto);
-                    userDiv.appendChild(userName);
-                    userList.appendChild(userDiv);
-                });
+                allUsers = users;
+                displayUsers(allUsers);
             })
             .catch(error => console.error('Error:', error));
     </script>

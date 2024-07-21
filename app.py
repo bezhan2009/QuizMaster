@@ -18,26 +18,32 @@ app.config['MAX_CONTENT_PATH'] = 16 * 1024 * 1024  # 16 MB
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+
 # Проверка расширения файла
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/')
 def home():
     return render_template('home.html')
 
+
 @app.route('/login')
 def login():
     return render_template('login.html')
+
 
 @app.route('/register')
 def register():
     return render_template('register.html')
 
+
 @app.route('/users')
 def get_users():
     return render_template('users.html')
+
 
 # Маршрут для загрузки изображений
 @app.route('/upload', methods=['POST'])
@@ -55,6 +61,7 @@ def upload_file():
     else:
         return jsonify({'error': 'File type not allowed'}), 400
 
+
 @app.route('/api/users', methods=['GET'])
 def api_users():
     conn = get_db_connection()
@@ -70,6 +77,7 @@ def api_users():
         else:
             user['photo_url'] = url_for('static', filename='images/default.png')  # Изображение по умолчанию
     return jsonify(users), 200
+
 
 @app.route('/api/register', methods=['POST'])
 def api_register():
@@ -96,6 +104,7 @@ def api_register():
 
     return jsonify({'error': 'Invalid file format'}), 400
 
+
 @app.route('/api/login', methods=['POST'])
 def api_login():
     data = request.get_json()
@@ -118,9 +127,13 @@ def api_login():
 
     return jsonify({'message': 'Invalid credentials'}), 401
 
+
 @app.route('/profile')
 def profile():
     return render_template('index.html'), 200
+
+
+
 
 if __name__ == '__main__':
     from models import create_tables
