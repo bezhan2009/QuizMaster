@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main_css_file_for_index.css') }}">
 </head>
 <body>
     <header class="header">
+        {% block header %}
         <div class="header-container">
             <div class="header-nav">
                 <div class="header-nav-logo">
@@ -20,12 +22,13 @@
                     <a href="http://127.0.0.1:5000/users">Поиск пользователей</a>
                     <a href="">Помощь</a>
                 </nav>
-                <div class="header-nav-actions">
+                <div class="header-nav-actions" id="user-actions">
                     <button class="btn btn-transparent" id="login">Вход</button>
                     <button class="btn btn-primary" id="register">Регистрация</button>
                 </div>
             </div>
         </div>
+        {% endblock %}
     </header>
     <main>
         {% block content %}{% endblock %}
@@ -44,6 +47,19 @@
             window.location.href = '{{ url_for("register") }}';
         });
 
+        function checkUserLogin() {
+            const token = localStorage.getItem('token');
+            const userActions = document.getElementById('user-actions');
+            if (token) {
+                userActions.innerHTML = '<button class="btn btn-transparent" id="logout">Выйти</button>';
+                document.getElementById('logout').addEventListener('click', function() {
+                    localStorage.removeItem('token');
+                    window.location.reload();
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', checkUserLogin);
     </script>
 </body>
 </html>

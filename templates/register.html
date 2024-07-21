@@ -10,14 +10,13 @@
             display: none;
         }
 
-        /* Стили для кнопки загрузки файла */
         .file-upload-label {
             display: inline-block;
             padding: 10px;
             border: 1px solid #444;
             border-radius: 4px;
             background-color: #ffffff;
-            color: white;
+            color: #444;
             cursor: pointer;
         }
 
@@ -52,7 +51,7 @@
         <p>Уже есть аккаунт? <a href="{{ url_for('login') }}">Вход</a></p>
     </div>
     <script>
-        document.getElementById('registerForm').addEventListener('submit', function(event) {
+        document.getElementById('register-form').addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const formData = new FormData();
@@ -61,17 +60,19 @@
             formData.append('password', document.getElementById('password').value);
             formData.append('photo', document.getElementById('photo').files[0]);
 
-            fetch('/api/register', {
+            const response = await fetch('{{ url_for("api_register") }}', {
                 method: 'POST',
                 body: formData
-            }).then(response => response.json())
-              .then(data => {
-                  alert(data.message);
-              }).catch(error => {
-                  console.error('Error:', error);
-              });
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Регистрация успешна!');
+                window.location.href = '{{ url_for("login") }}';
+            } else {
+                alert(data.message);
+            }
         });
     </script>
-
 </body>
 </html>
