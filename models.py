@@ -10,7 +10,7 @@ def create_tables():
             id SERIAL PRIMARY KEY,
             username VARCHAR(50) UNIQUE NOT NULL,
             email VARCHAR(100) UNIQUE NOT NULL,
-            password_hash VARCHAR(128) NOT NULL,
+            password_hash VARCHAR(256) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """,
@@ -46,6 +46,9 @@ def create_tables():
             answer_id INTEGER REFERENCES answers(id),
             responded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
+        """,
+        """
+        ALTER TABLE users ADD COLUMN photo_filename VARCHAR(255);
         """
     )
     conn = get_db_connection()

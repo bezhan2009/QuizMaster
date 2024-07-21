@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск пользователей</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .user-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .user {
+            display: flex;
+            align-items: center;
+            background-color: #1e1e1e;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .user img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div id="userList" class="user-container"></div>
+
+    <script>
+        fetch('/api/users')
+            .then(response => response.json())
+            .then(users => {
+                const userList = document.getElementById('userList');
+                users.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'user'; // Добавляем класс для стилей
+
+                    const userPhoto = document.createElement('img');
+                    userPhoto.src = user.photo_url; // Убедитесь, что этот URL правильный
+
+                    const userName = document.createElement('span');
+                    userName.textContent = user.username;
+
+                    userDiv.appendChild(userPhoto);
+                    userDiv.appendChild(userName);
+                    userList.appendChild(userDiv);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>
