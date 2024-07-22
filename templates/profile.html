@@ -14,7 +14,6 @@
                     <li><a href="#">Домой</a></li>
                     <li><a href="#">Сообщения</a></li>
                     <li><a href="#">Уведомления</a></li>
-
                 </ul>
                 <div class="header-nav-actions">
                     <button class="btn btn-primary">Выйти</button>
@@ -26,42 +25,55 @@
     <main class="profile">
         <div class="profile-header">
             <div class="profile-cover">
-                <img src="https://via.placeholder.com/1200x400" alt="Обложка профиля">
+                <img src="{{ user.cover_filename if user.cover_filename else url_for('static', filename='images/default_cover.jpg') }}" alt="Обложка профиля">
             </div>
             <div class="profile-info">
                 <div class="profile-avatar">
-                    <img src="https://via.placeholder.com/150" alt="Аватар пользователя">
+                    <img src="{{ user.photo_url if user.photo_url else url_for('static', filename='images/default.png') }}" alt="Аватар пользователя">
                 </div>
                 <div class="profile-details">
-                    <h1>Имя Фамилия</h1>
-                    <p>@username</p>
+                    <h1>{{ user.name if user.name else user.username }}</h1>
+                    <p>@{{ user.username }}</p>
                     <button class="btn btn-primary">Редактировать профиль</button>
                 </div>
             </div>
         </div>
 
         <section class="profile-content">
+            {% if user.bio %}
             <div class="profile-section">
                 <h2>О себе</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Integer vel ligula ut risus gravida aliquet.</p>
+                <p>{{ user.bio }}</p>
             </div>
+            {% else %}
+            <div class="profile-section">
+                <h2>О себе</h2>
+                <p>Нет информации о себе</p>
+            </div>
+            {% endif %}
 
+            {% if user.achievements %}
             <div class="profile-section">
                 <h2>Достижения</h2>
                 <ul>
-                    <li>Достижение 1</li>
-                    <li>Достижение 2</li>
-                    <li>Достижение 3</li>
+                    {% for achievement in user.achievements %}
+                    <li>{{ achievement }}</li>
+                    {% endfor %}
                 </ul>
             </div>
+            {% endif %}
 
             <div class="profile-section">
                 <h2>Контакты</h2>
+                {% if user.contact %}
                 <ul>
-                    <li>Email: user@example.com</li>
-                    <li>Телефон: +123 456 7890</li>
-                    <li>Сайт: <a href="#">userwebsite.com</a></li>
+                    <li>Email: {{ user.contact.email if user.contact.email else 'Нет контактов' }}</li>
+                    <li>Телефон: {{ user.contact.phone if user.contact.phone else 'Нет контактов' }}</li>
+                    <li>Сайт: <a href="{{ user.contact.website if user.contact.website else '#' }}"> {{ user.contact.website if user.contact.website else 'Нет контактов' }}</a></li>
                 </ul>
+                {% else %}
+                <p>Нет контактов</p>
+                {% endif %}
             </div>
         </section>
     </main>

@@ -66,7 +66,7 @@ def upload_file():
 def api_users():
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT * FROM users")
+    cur.execute("SELECT * FROM quiz_app.users")
     users = cur.fetchall()
     cur.close()
     conn.close()
@@ -95,7 +95,7 @@ def api_register():
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("INSERT INTO users (username, email, password_hash, photo_filename) VALUES (%s, %s, %s, %s)",
+        cur.execute("INSERT INTO quiz_app.users (username, email, password_hash, photo_filename) VALUES (%s, %s, %s, %s)",
                     (username, email, password_hash, photo_filename))
         conn.commit()
         cur.close()
@@ -113,7 +113,7 @@ def api_login():
 
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+    cur.execute("SELECT * FROM quiz_app.users WHERE email = %s", (email,))
     user = cur.fetchone()
     cur.close()
     conn.close()
@@ -132,11 +132,33 @@ def api_login():
 def profile(id_user):
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT * FROM users WHERE id = %s", (id_user,))
+
+    # Получение данных пользователя
+    cur.execute("""
+        SELECT 
+            u.*, 
+            ud.gender, ud.surname, ud.name, ud.favorite_subject, 
+            ud.cover_filename, ud.achievements, ud.bio, 
+            c.title as contact_title 
+        FROM quiz_app.users u
+        LEFT JOIN quiz_app.user_data ud ON u.id = ud.user_id
+        LEFT JOIN quiz_app.contacts c ON ud.contact_id = c.id
+        WHERE u.id = %s
+    """, (id_user,))
     user = cur.fetchone()
     cur.close()
     conn.close()
+
     if user:
+        # Заменяем пустые значения по умолчанию
+        user['photo_url'] = url_for('static', filename='images/' + (user['photo_filename'] or 'default.png'))
+        user['cover_url'] = url_for('static', filename='images/' + (user['cover_filename'] or 'default_cover.png'))
+        user['name'] = user['name'] or user['username']
+        user['surname'] = user['surname'] or ''
+        user['achievements'] = user['achievements'] or None
+        user['bio'] = user['bio'] or user['username']
+        user['contact_title'] = user['contact_title'] or 'нет контактов'
+
         return render_template('profile.html', user=user)
     else:
         return jsonify({'error': 'User not found'}), 404

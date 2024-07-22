@@ -14,12 +14,42 @@
         <button class="btn btn-primary" id="register" style="width: auto">Регистрация</button>
     </div>
     <script>
+        // Функция для декодирования JWT токена
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // Функция для проверки токена в localStorage и перенаправления на профиль
+        function checkToken() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                const decodedToken = parseJwt(token);
+                if (decodedToken && decodedToken.user_id) {
+                    const userId = decodedToken.user_id;
+                    window.location.href = `/profile/${userId}/`;
+                }
+            }
+        }
+
+        // Проверка токена при загрузке страницы
+        window.onload = checkToken;
+
+        // Обработчики событий для кнопок входа и регистрации
         document.getElementById('login').addEventListener('click', function() {
-            window.location.href = "{{ url_for('login') }}";
+            window.location.href = "/login";
         });
 
         document.getElementById('register').addEventListener('click', function() {
-            window.location.href = "{{ url_for('register') }}";
+            window.location.href = "/register";
         });
     </script>
 </body>
