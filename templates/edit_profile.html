@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать профиль</title>
+    <style>
+        /* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Стили для заголовка */
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 0;
+}
+
+.header-container {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.header-nav-menu li {
+    margin-right: 20px;
+}
+
+.header-nav-menu a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.header-nav-actions .btn {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+/* Стили для основной части профиля */
+.profile {
+    width: 90%;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.profile-header {
+    position: relative;
+}
+
+.profile-cover img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.profile-avatar {
+    margin-right: 20px;
+}
+
+.profile-avatar img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-details h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.profile-details p {
+    color: #888;
+    margin: 5px 0;
+}
+
+.profile-details .btn {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Стили для контента профиля */
+.profile-content {
+    padding: 20px;
+}
+
+.profile-section {
+    margin-bottom: 20px;
+}
+
+.profile-section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.profile-section p, .profile-section ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.profile-section ul li {
+    margin-bottom: 5px;
+}
+
+/* Стили для формы редактирования профиля */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+form .profile-section {
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+form input[type="text"], form input[type="email"], form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form textarea {
+    height: 100px;
+}
+
+form .btn {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="header-nav">
+                <ul class="header-nav-menu">
+                    <li><a href="{{ url_for('home') }}">Домой</a></li>
+                    <li><a href="#">Сообщения</a></li>
+                    <li><a href="#">Уведомления</a></li>
+                </ul>
+                <div class="header-nav-actions">
+                    <button class="btn btn-primary">Выйти</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="profile">
+        <div class="profile-header">
+            <div class="profile-cover">
+                <img src="{{ user.cover_url }}" alt="Обложка профиля">
+            </div>
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    <img src="{{ user.photo_url if user.photo_url else url_for('static', filename='images/default.png') }}" alt="Аватар пользователя">
+                </div>
+                <div class="profile-details">
+                    <h1>{{ user.name }} {{ user.surname }}</h1>
+                    <p>@{{ user.username }}</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="profile-content">
+            <form action="{{ url_for('edit_profile', id_user=user.id) }}" method="POST">
+                <div class="profile-section">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" value="{{ user.username }}" required>
+                </div>
+                <div class="profile-section">
+                    <label for="email">Электронная почта</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                <div class="profile-section">
+                    <label for="gender">Пол</label>
+                    <input type="text" id="gender" name="gender" value="{{ user.gender }}">
+                </div>
+                <div class="profile-section">
+                    <label for="surname">Фамилия</label>
+                    <input type="text" id="surname" name="surname" value="{{ user.surname }}">
+                </div>
+                <div class="profile-section">
+                    <label for="name">Имя</label>
+                    <input type="text" id="name" name="name" value="{{ user.name }}">
+                </div>
+                <div class="profile-section">
+                    <label for="favorite_subject">Любимый предмет</label>
+                    <input type="text" id="favorite_subject" name="favorite_subject" value="{{ user.favorite_subject }}">
+                </div>
+                <div class="profile-section">
+                    <label for="bio">О себе</label>
+                    <textarea id="bio" name="bio">{{ user.bio }}</textarea>
+                </div>
+                <div class="profile-section">
+                    <label for="contact_id">Контакты</label>
+                    <input type="text" id="contact_id" name="contact_id" value="{{ user.contact_id }}">
+                </div>
+                <div class="profile-section">
+                    <label for="achievements">Достижения</label>
+                    <input type="text" id="achievements" name="achievements" value="{{ user.achievements }}">
+                </div>
+                <div class="profile-section">
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

@@ -164,6 +164,65 @@ def profile(id_user):
         return jsonify({'error': 'User not found'}), 404
 
 
+@app.route('/profile/edit/<int:id_user>/', methods=['GET', 'POST'])
+def edit_profile(id_user):
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    if request.method == 'POST':
+        # Получение данных из формы
+        username = request.form.get('username')
+        email = request.form.get('email')
+        gender = request.form.get('gender')
+        surname = request.form.get('surname')
+        name = request.form.get('name')
+        favorite_subject = request.form.get('favorite_subject')
+        bio = request.form.get('bio')
+        contact_id = request.form.get('contact_id')
+        achievements = request.form.get('achievements')
+
+        # Обновление данных пользователя
+        cur.execute("""
+            UPDATE quiz_app.users
+            SET username = %s, email = %s
+            WHERE id = %s
+        """, (username, email, id_user))
+
+        cur.execute("""
+            UPDATE quiz_app.user_data
+            SET gender = %s, surname = %s, name = %s, favorite_subject = %s,
+                bio = %s, contact_id = %s, achievements = %s
+            WHERE user_id = %s
+        """, (gender, surname, name, favorite_subject, bio, contact_id, achievements, id_user))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return redirect(url_for('profile', id_user=id_user))
+
+    # Получение текущих данных пользователя для заполнения формы
+    cur.execute("""
+        SELECT 
+            u.*, 
+            ud.gender, ud.surname, ud.name, ud.favorite_subject, 
+            ud.cover_filename, ud.achievements, ud.bio, 
+            c.title as contact_title 
+        FROM quiz_app.users u
+        LEFT JOIN quiz_app.user_data ud ON u.id = ud.user_id
+        LEFT JOIN quiz_app.contacts c ON ud.contact_id = c.id
+        WHERE u.id = %s
+    """, (id_user,))
+    user = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    if user:
+        return render_template('edit_profile.html', user=user)
+    else:
+        return jsonify({'error': 'User not found'}), 404
+
+
 if __name__ == '__main__':
     from models import create_tables
 

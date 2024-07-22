@@ -34,7 +34,7 @@
                 <div class="profile-details">
                     <h1>{{ user.name if user.name else user.username }}</h1>
                     <p>@{{ user.username }}</p>
-                    <button class="btn btn-primary">Редактировать профиль</button>
+                    <button class="btn btn-primary" onclick="window.location.href = 'http://127.0.0.1:5000/profile/edit/{{ user.id }}'">Редактировать профиль</button>
                 </div>
             </div>
         </div>
