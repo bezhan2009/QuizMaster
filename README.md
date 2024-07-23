@@ -53,10 +53,6 @@ QuizMaster is a web application for creating group polls and quizzes. With this 
 4. Share the link to the poll or quiz with other users.
 5. View the results in real-time.
 
-## Contribution
-
-We welcome contributions to the project! If you have ideas or want to fix issues, please create a pull request or open an issue.
-
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
