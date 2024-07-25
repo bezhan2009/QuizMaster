@@ -11,8 +11,8 @@
         {% block header %}
         <div class="header-container">
             <div class="header-nav">
-                <div class="header-nav-logo">
-                    <svg-icon></svg-icon>
+                <div class="header-logo">
+                    <a href="http://127.0.0.1:5000/index"><img src="{{ url_for('static', filename='icons/main.svg') }}" alt="Логотип"></a>
                 </div>
                 <div class="menu-toggle" onclick="toggleMenu()">☰</div>
                 <nav class="header-nav-menu">

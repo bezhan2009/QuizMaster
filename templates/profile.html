@@ -18,8 +18,9 @@
                     <li><a href="#">Сообщения</a></li>
                     <li><a href="#">Уведомления</a></li>
                 </ul>
-                <div class="header-nav-actions">
-                    <button class="btn btn-primary">Выйти</button>
+                <div class="header-nav-actions" id="user_profile_actions">
+                    <button class="btn btn-transparent" id="login">Вход</button>
+                    <button class="btn btn-primary" id="register">Регистрация</button>
                 </div>
             </div>
         </div>
@@ -37,7 +38,8 @@
                 <div class="profile-details">
                     <h1>{{ user.name if user.name else user.username }}</h1>
                     <p>@{{ user.username }}</p>
-                    <button class="btn btn-primary" onclick="window.location.href = 'http://127.0.0.1:5000/profile/edit/{{ user.id }}'">Редактировать профиль</button>
+                    <div id="user-actions">
+                    </div>
                 </div>
             </div>
         </div>
@@ -80,5 +82,49 @@
             </div>
         </section>
     </main>
+
+    <script>
+        document.getElementById('login').addEventListener('click', function() {
+            window.location.href = '{{ url_for("login") }}';
+        });
+
+        document.getElementById('register').addEventListener('click', function() {
+            window.location.href = '{{ url_for("register") }}';
+        });
+
+        // Функция для декодирования JWT токена
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function checkUserLogin() {
+            const token = localStorage.getItem('token');
+            const userActions = document.getElementById('user-actions');
+            const userProfileActions = document.getElementById('user_profile_actions');
+            const userId = {{ user.id }};
+            if (token) {
+                userProfileActions.innerHTML = `<button class="btn btn-primary" id="logout">Выйти</button>`;
+                document.getElementById('logout').addEventListener('click', function() {
+            localStorage.removeItem('token');
+            window.location.reload();
+        });
+                const decodedToken = parseJwt(token);
+                if (decodedToken && decodedToken.user_id === userId) {
+                    userActions.innerHTML = `<button class="btn btn-primary" onclick="window.location.href = 'http://127.0.0.1:5000/profile/edit/${userId}'">Редактировать профиль</button>`;
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', checkUserLogin);
+    </script>
 </body>
 </html>

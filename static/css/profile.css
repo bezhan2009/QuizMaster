@@ -200,3 +200,24 @@ body {
 .header-logo a:hover {
   opacity: 0.7;
 }
+.btn.btn-primary {
+  background: #3d40c6;
+  color: #fff;
+}
+
+.btn.btn-primary:hover {
+  background-color: #2528b1;
+}
+
+.btn-transparent {
+  border: 1px solid #dedfe2;
+  color: #4d49ce;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-transparent:hover {
+  background-color: #efeef9;
+}

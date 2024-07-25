@@ -92,14 +92,21 @@ def api_register():
     file = request.files['photo']
 
     if file and allowed_file(file.filename):
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM quiz_app.users WHERE username = %s", [username])
+        user = cur.fetchone()
+        if user:
+            return jsonify({'message': 'Username already taken'}), 400
+        cur.execute("SELECT * FROM quiz_app.users WHERE email = %s", [email])
+        user = cur.fetchone()
+        if user:
+            return jsonify({'message': 'Email already taken'}), 400
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         photo_filename = filename
 
         password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
-        conn = get_db_connection()
-        cur = conn.cursor()
         cur.execute("INSERT INTO quiz_app.users (username, email, password_hash, photo_filename) VALUES (%s, %s, %s, %s)",
                     (username, email, password_hash, photo_filename))
         conn.commit()

@@ -186,7 +186,7 @@ form .btn {
                     <li><a href="#">Уведомления</a></li>
                 </ul>
                 <div class="header-nav-actions">
-                    <button class="btn btn-primary">Выйти</button>
+                    <button class="btn btn-primary" id="logout">Выйти</button>
                 </div>
             </div>
         </div>
@@ -252,5 +252,12 @@ form .btn {
             </form>
         </section>
     </main>
+
+    <script>
+        document.getElementById('logout').addEventListener('click', function() {
+                    localStorage.removeItem('token');
+                    window.location.reload();
+                });
+    </script>
 </body>
 </html>
