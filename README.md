@@ -1,4 +1,4 @@
-# QuizMaster
+# <img src="static/icons/main.svg" width="40" height="40">uizMaster
 
 QuizMaster is a web application for creating group polls and quizzes. With this application, users can create and participate in polls and quizzes, sharing them with friends and colleagues.
 
